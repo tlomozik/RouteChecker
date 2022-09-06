@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux';
 const ProfileScreen = () => {
   const {user} = useSelector(state => state.user);
   console.log(user.email);
+
   return (
     <GlobalContainer>
       <ProfileIcon />

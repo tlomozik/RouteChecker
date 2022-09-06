@@ -18,7 +18,7 @@ export default () => {
         drawerContent={props => <CustomDrawerContent {...props} />}
         screenOptions={{
           headerStyle: {
-            height: 75,
+            height: 60,
             backgroundColor: `${headerColor}`,
           },
           drawerActiveTintColor: '#F77F00',

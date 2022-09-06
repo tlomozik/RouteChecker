@@ -1,233 +1,31 @@
-import {StyleSheet, Text, View, StatusBar} from 'react-native';
-import React from 'react';
-import {GlobalContainer} from '../styles';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import {ActivityIndicator, View, Text, Button} from 'react-native';
+import React, {useEffect} from 'react';
+import {CentralizedContainer, GlobalContainer} from '../styles';
+import getCurrentLocation from '../services/getCurrentLocation';
+import Map from '../components/map/Map';
+import BottomPanel from '../components/map/BottomPanel';
 const HomeScreen = () => {
-  const mapStyle = [
-    {
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#242f3e',
-        },
-      ],
-    },
-    {
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#746855',
-        },
-      ],
-    },
-    {
-      elementType: 'labels.text.stroke',
-      stylers: [
-        {
-          color: '#242f3e',
-        },
-      ],
-    },
-    {
-      featureType: 'administrative',
-      elementType: 'geometry',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'administrative.locality',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#d59563',
-        },
-      ],
-    },
-    {
-      featureType: 'poi',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'poi',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#d59563',
-        },
-      ],
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#263c3f',
-        },
-      ],
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#6b9a76',
-        },
-      ],
-    },
-    {
-      featureType: 'road',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#38414e',
-        },
-      ],
-    },
-    {
-      featureType: 'road',
-      elementType: 'geometry.stroke',
-      stylers: [
-        {
-          color: '#212a37',
-        },
-      ],
-    },
-    {
-      featureType: 'road',
-      elementType: 'labels.icon',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'road',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#9ca5b3',
-        },
-      ],
-    },
-    {
-      featureType: 'road.highway',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#746855',
-        },
-      ],
-    },
-    {
-      featureType: 'road.highway',
-      elementType: 'geometry.stroke',
-      stylers: [
-        {
-          color: '#1f2835',
-        },
-      ],
-    },
-    {
-      featureType: 'road.highway',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#f3d19c',
-        },
-      ],
-    },
-    {
-      featureType: 'transit',
-      stylers: [
-        {
-          visibility: 'off',
-        },
-      ],
-    },
-    {
-      featureType: 'transit',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#2f3948',
-        },
-      ],
-    },
-    {
-      featureType: 'transit.station',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#d59563',
-        },
-      ],
-    },
-    {
-      featureType: 'water',
-      elementType: 'geometry',
-      stylers: [
-        {
-          color: '#17263c',
-        },
-      ],
-    },
-    {
-      featureType: 'water',
-      elementType: 'labels.text.fill',
-      stylers: [
-        {
-          color: '#515c6d',
-        },
-      ],
-    },
-    {
-      featureType: 'water',
-      elementType: 'labels.text.stroke',
-      stylers: [
-        {
-          color: '#17263c',
-        },
-      ],
-    },
-  ];
+  const [useCurrentLocation, currentLocation, loading] = getCurrentLocation();
+  const {latitude, longitude} = currentLocation;
+
+  console.log(currentLocation);
+
+  useEffect(() => {
+    useCurrentLocation();
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar />
-      <MapView
-        provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-        style={styles.map}
-        customMapStyle={mapStyle}
-        initialRegion={{
-          latitude: 50.333203899697374,
-          longitude: 19.155580215448197,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}>
-        <Marker
-          coordinate={{
-            latitude: 50.333203899697374,
-            longitude: 19.155580215448197,
-          }}
-        />
-      </MapView>
+    <View style={{flex: 1, justifyContent: 'flex-end'}}>
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <>
+          <Map latitude={latitude} longitude={longitude} />
+          <BottomPanel />
+        </>
+      )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {...StyleSheet.absoluteFillObject},
-});
 
 export default HomeScreen;
