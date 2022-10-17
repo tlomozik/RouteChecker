@@ -5,7 +5,8 @@ import {AuthorizationForm} from './form/AuthorizationForm';
 import {StyledTextInput} from './form/StyledTextInput';
 import {StyledButtonText} from './text/StyledButtonText';
 import {Variables} from './Variables';
-
+import {CommonText} from './text/CommonText';
+import {RecordButton} from './map/RecordButton';
 export {
   CentralizedContainer,
   GlobalContainer,
@@ -13,5 +14,7 @@ export {
   AuthorizationForm,
   StyledTextInput,
   StyledButtonText,
+  CommonText,
+  RecordButton,
   Variables,
 };

@@ -1,67 +1,52 @@
 import React, {useState, useRef} from 'react';
-import {
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-  StatusBar,
-} from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
+import {useWindowDimensions} from 'react-native';
+import MapView, {Circle, Polyline} from 'react-native-maps';
 import mapStyle from '../../styles/map/mapStyle';
+import {useSelector} from 'react-redux';
 
-const Map = ({latitude, longitude}) => {
-  const [pin, setPin] = useState({latitude, longitude});
-  // const windowWidth = Dimensions.get('window').width;
-  // const windowHeight = Dimensions.get('window').height;
-  // const screenHeight = Dimensions.get('screen').height;
+const Map = () => {
+  const {coords, coordsArray} = useSelector(state => state.coords);
 
-  // const statusBarHeight = StatusBar.currentHeight || 24;
+  console.log(coordsArray.length);
   const {height, width} = useWindowDimensions();
   const mapViewRef = useRef(null);
+
   return (
     <MapView
       ref={mapViewRef}
-      provider="google" // remove if not using Google Maps
+      zoomEnabled={true}
+      scrollEnabled={false}
+      provider="google"
       style={{
         width,
         height,
       }}
       customMapStyle={mapStyle}
-      //  showsTraffic={true}
-
       initialRegion={{
-        latitude,
-        longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        ...coords,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
       }}
-      onMarkerDragEnd={e => {
-        setPin({
-          latitude: e.nativeEvent.coordinate.latitude,
-          longitude: e.nativeEvent.coordinate.longitude,
-        });
-        mapViewRef.current?.animateToRegion(
-          {
-            latitude: e.nativeEvent.coordinate.latitude,
-            longitude: e.nativeEvent.coordinate.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          },
-          1000,
-        );
+      region={{
+        ...coords,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
       }}>
-      <Marker
-        redraw
-        draggable={true}
-        onDragStart={e => console.log(pin)}
-        onDragEnd={e => {
-          console.log(pin);
-        }}
-        coordinate={{
-          latitude: pin.latitude,
-          longitude: pin.longitude,
-        }}
-      />
+      {coords ? (
+        <Circle
+          center={coords}
+          radius={20}
+          strokeColor={'rgba(255, 0, 0, 1)'}
+          fillColor={'rgba(255, 0, 0, 0.3)'}
+        />
+      ) : null}
+      {coordsArray.length > 0 ? (
+        <Polyline
+          coordinates={[coordsArray.latitude, coordsArray.longitude]}
+          strokeColor="rgba(255,255,0,0.5)" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeWidth={6}
+        />
+      ) : null}
     </MapView>
   );
 };

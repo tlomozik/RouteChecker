@@ -11,6 +11,7 @@ import signin from '../../services/signin';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import {FadeIn} from 'react-native-reanimated';
 
 const AuthForm = () => {
   const handleSignUp = () => {
@@ -30,7 +31,7 @@ const AuthForm = () => {
   const [type, setType] = useState(true);
 
   return (
-    <AuthorizationForm>
+    <AuthorizationForm entering={FadeIn.duration(1000)}>
       <StyledTextInput
         selectionColor="#F77F00"
         label="Email"

@@ -1,7 +1,7 @@
-import * as palette from "../Variables.js";
-import styled from "styled-components/native";
-
-export const AuthorizationForm = styled.View`
+import * as palette from '../Variables.js';
+import styled from 'styled-components/native';
+import Animated from 'react-native-reanimated';
+export const AuthorizationForm = styled(Animated.View)`
   background-color: white;
   justify-content: center;
   align-items: center;

@@ -1,18 +1,24 @@
 import {ActivityIndicator, View, Text, Button} from 'react-native';
-import React, {useEffect} from 'react';
-import {CentralizedContainer, GlobalContainer} from '../styles';
+import React from 'react';
 import getCurrentLocation from '../services/getCurrentLocation';
 import Map from '../components/map/Map';
 import BottomPanel from '../components/map/BottomPanel';
+import watchPosition from '../services/watchPosition';
+import {useDispatch} from 'react-redux';
+import {ADD_COORDS, UPDATE_COORDS} from '../redux/slices/coordsSlice';
+import {useIsFocused} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 const HomeScreen = () => {
-  const [useCurrentLocation, currentLocation, loading] = getCurrentLocation();
-  const {latitude, longitude} = currentLocation;
+  const {recording} = useSelector(state => state.coords);
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const [loading] = getCurrentLocation(location =>
+    dispatch(ADD_COORDS(location)),
+  );
 
-  console.log(currentLocation);
-
-  useEffect(() => {
-    useCurrentLocation();
-  }, []);
+  watchPosition(isFocused, location =>
+    dispatch(UPDATE_COORDS(location, recording)),
+  );
 
   return (
     <View style={{flex: 1, justifyContent: 'flex-end'}}>
@@ -20,7 +26,7 @@ const HomeScreen = () => {
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <>
-          <Map latitude={latitude} longitude={longitude} />
+          <Map />
           <BottomPanel />
         </>
       )}
