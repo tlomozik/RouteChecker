@@ -1,5 +1,5 @@
-import {ActivityIndicator, View, Text, Button} from 'react-native';
-import React from 'react';
+import {ActivityIndicator, View, Image, StyleSheet} from 'react-native';
+import React, {useCallback} from 'react';
 import getCurrentLocation from '../services/getCurrentLocation';
 import Map from '../components/map/Map';
 import BottomPanel from '../components/map/BottomPanel';
@@ -8,22 +8,49 @@ import {useDispatch} from 'react-redux';
 import {ADD_COORDS, UPDATE_COORDS} from '../redux/slices/coordsSlice';
 import {useIsFocused} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
+import {
+  accelerometer,
+  gyroscope,
+  setUpdateIntervalForType,
+  SensorTypes,
+} from 'react-native-sensors';
+import {map, filter} from 'rxjs/operators';
+
+setUpdateIntervalForType(SensorTypes.accelerometer, 400); // defaults to 100ms
+
+const subscription = accelerometer
+  .pipe(
+    map(({x, y, z}) => x + y + z),
+    filter(speed => speed > 20),
+  )
+  .subscribe(speed => console.log(`You moved your phone with ${speed}`));
+
 const HomeScreen = () => {
   const {recording} = useSelector(state => state.coords);
-  const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const [loading] = getCurrentLocation(location =>
+  const isFocused = useIsFocused();
+
+  //////callbacks initizalization
+  const watchCallback = useCallback(
+    location => dispatch(UPDATE_COORDS(location, recording)),
+    [recording],
+  );
+  const currentLocationCallback = useCallback(location =>
     dispatch(ADD_COORDS(location)),
   );
 
-  watchPosition(isFocused, location =>
-    dispatch(UPDATE_COORDS(location, recording)),
-  );
+  /////invoking hooks
+  const [loading] = getCurrentLocation(currentLocationCallback);
+  watchPosition(isFocused, recording, watchCallback);
 
   return (
-    <View style={{flex: 1, justifyContent: 'flex-end'}}>
+    <View style={{flex: 1, alignItems: 'center'}}>
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator
+          style={{alignSelf: 'center'}}
+          size="large"
+          color="#0000ff"
+        />
       ) : (
         <>
           <Map />

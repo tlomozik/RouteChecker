@@ -6,20 +6,37 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {CommonText} from '../../styles';
 import {useDispatch} from 'react-redux';
-import {START_RECORDING, STOP_RECORDING} from '../../redux//slices/coordsSlice';
-
+import {
+  START_RECORDING,
+  STOP_RECORDING,
+  SAVE_COORDS,
+  WIPE_COORDS,
+} from '../../redux//slices/coordsSlice';
+import CustomDialog from './CustomDialog';
+import addTrack from '../../services/addTrack';
 const handleCoordsShowing = coordsArray => {
   coordsArray.map(item => console.log(item.latitude, ' ', item.longitude));
 };
 
 const BottomPanel = () => {
-  const {coords, coordsArray, recording} = useSelector(state => state.coords);
-  const {latitude, longitude} = coords;
+  const {coordsArray, recording} = useSelector(state => state.coords);
+
   const dispatch = useDispatch();
+  //const [track, setTrack] = useState('');
+  const [shouldShow, setShouldShow] = useState({signal: false, type: ''});
+
+  const handleTrackDeleting = () => {
+    dispatch(WIPE_COORDS());
+  };
+
+  const handleTrackSaving = track => {
+    const [saveTrack] = addTrack();
+    saveTrack(coordsArray, track);
+    handleTrackDeleting();
+  };
 
   ////////////////////////////////////Animation
   const {height, width} = useWindowDimensions();
@@ -57,43 +74,40 @@ const BottomPanel = () => {
 
   ////////////////////////////////////Animation
   return (
-    <GestureDetector gesture={Gesture.Exclusive(pan, tap)}>
-      <Animated.View
-        style={[
-          {
-            position: 'absolute',
-            backgroundColor: 'white',
-            width: width - 20,
-            opacity: 1,
-            height: height,
-            top: height,
-            alignSelf: 'center',
-            alignItems: 'center',
-            padding: 5,
-            borderRadius: 20,
-          },
-          animatedStyles,
-        ]}>
-        <View
-          style={{
-            height: 5,
-            width: 100,
-            borderRadius: 10,
-            backgroundColor: 'black',
-            marginBottom: 20,
-          }}></View>
-        <View>
-          <CommonText style={{alignSelf: 'center'}}>
-            Aktualna pozycja
-          </CommonText>
-          <CommonText>x: {latitude}</CommonText>
-          <CommonText>y: {longitude}</CommonText>
+    <>
+      <GestureDetector gesture={Gesture.Exclusive(pan, tap)}>
+        <Animated.View
+          style={[
+            {
+              position: 'absolute',
+              backgroundColor: 'white',
+              width: width - 20,
+              opacity: 1,
+              height: height,
+              top: height,
+              alignSelf: 'center',
+              alignItems: 'center',
+              padding: 5,
+              borderRadius: 20,
+            },
+            animatedStyles,
+          ]}>
           <View
             style={{
-              flexDirection: 'row',
+              height: 5,
+              width: 100,
+              borderRadius: 10,
+              alignSelf: 'center',
+              backgroundColor: 'black',
+              marginBottom: 20,
+            }}></View>
+
+          <View
+            style={{
+              flexDirection: 'column',
               justifyContent: 'space-between',
             }}>
-            {!recording ? (
+            {!recording && coordsArray == 0 ? (
               <RecordButton
                 icon="play"
                 mode="contained"
@@ -101,7 +115,8 @@ const BottomPanel = () => {
                 onPress={() => dispatch(START_RECORDING(recording))}>
                 <Text> Start</Text>
               </RecordButton>
-            ) : (
+            ) : null}
+            {recording ? (
               <RecordButton
                 icon="stop"
                 mode="contained"
@@ -109,30 +124,50 @@ const BottomPanel = () => {
                 onPress={() => dispatch(STOP_RECORDING(recording))}>
                 <Text> Stop</Text>
               </RecordButton>
-            )}
+            ) : null}
 
-            {coordsArray.length > 0 ? (
-              <RecordButton
-                icon="map-check-outline"
-                mode="contained"
-                labelStyle={{color: 'black'}}
-                onPress={() => handleCoordsShowing(coordsArray)}>
-                <Text> Show</Text>
-              </RecordButton>
+            {coordsArray.length > 0 && !recording ? (
+              <>
+                <RecordButton
+                  icon="map-check-outline"
+                  mode="contained"
+                  labelStyle={{color: 'black'}}
+                  onPress={() => handleCoordsShowing(coordsArray)}>
+                  <Text> Show</Text>
+                </RecordButton>
+
+                <RecordButton
+                  icon="content-save-all"
+                  mode="contained"
+                  labelStyle={{color: 'black'}}
+                  onPress={() => setShouldShow({signal: true, type: 'save'})}>
+                  <Text> Save</Text>
+                </RecordButton>
+
+                <RecordButton
+                  icon="trash-can-outline"
+                  mode="contained"
+                  labelStyle={{color: 'black'}}
+                  onPress={() => setShouldShow({signal: true, type: 'delete'})}>
+                  <Text> Delete </Text>
+                </RecordButton>
+              </>
             ) : null}
           </View>
-        </View>
-      </Animated.View>
-    </GestureDetector>
+        </Animated.View>
+      </GestureDetector>
+      {shouldShow.signal == true ? (
+        <CustomDialog
+          show={shouldShow}
+          setShow={setShouldShow}
+          callback={name => {
+            if (shouldShow.type === 'delete') return handleTrackDeleting();
+            else return handleTrackSaving(name);
+          }}
+        />
+      ) : null}
+    </>
   );
 };
 
 export default BottomPanel;
-
-const styles = StyleSheet.create({
-  imgStyle: {
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
-  },
-});

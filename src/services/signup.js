@@ -1,17 +1,18 @@
-import { auth } from "../firebase/firebase";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { ADD_USER } from "../redux/slices/authSlice";
+import {auth} from '../firebase/firebase';
+import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
 
-export default ({ email, password, name, navigation, dispatch }) => {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredentials) => {
+export default (user, callback) => {
+  createUserWithEmailAndPassword(auth, user.email, user.password)
+    .then(userCredentials => {
       updateProfile(auth.currentUser, {
-        displayName: name,
+        displayName: user.name,
       });
-      dispatch(ADD_USER(userCredentials.user));
-      navigation.navigate("Home");
+      callback({
+        email: userCredentials.user.email,
+        displayName: user.name,
+      });
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error.code);
       console.log(error.message);
     });

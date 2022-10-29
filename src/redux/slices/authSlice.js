@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
-  user: "",
+  user: {},
 };
 
 export const authSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     ADD_USER: (state, action) => {
@@ -13,10 +13,11 @@ export const authSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.user = action.payload;
+
+      return {...state, user: action.payload};
     },
 
-    DELETE_USER: (state) => {
+    DELETE_USER: state => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
@@ -24,7 +25,7 @@ export const authSlice = createSlice({
       //   const newstate = state.selectedItems.filter(
       //     (item) => item.title != action.payload.title
       //   );
-      state.user = "";
+      state.user = '';
     },
 
     // decrement: (state) => {
@@ -37,6 +38,6 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { ADD_USER, DELETE_USER } = authSlice.actions;
+export const {ADD_USER, DELETE_USER} = authSlice.actions;
 
 export default authSlice.reducer;
