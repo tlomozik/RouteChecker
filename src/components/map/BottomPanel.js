@@ -16,7 +16,7 @@ import {
   WIPE_COORDS,
 } from '../../redux//slices/coordsSlice';
 import CustomDialog from './CustomDialog';
-import addTrack from '../../services/addTrack';
+import addTrack from '../../services/Location/addTrack';
 const handleCoordsShowing = coordsArray => {
   coordsArray.map(item => console.log(item.latitude, ' ', item.longitude));
 };

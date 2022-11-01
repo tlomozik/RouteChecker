@@ -4,10 +4,12 @@ import {headerColor} from '../styles/Variables';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AuthorizationScreen from '../screens/AuthorizationScreen';
-import {isLoggedIn} from '../services/isLoggedIn';
+import {isLoggedIn} from '../services/Authentication/isLoggedIn';
 import CustomDrawerContent from './CustomDrawerContent';
 import Icon from 'react-native-vector-icons/AntDesign';
-import React from 'react';
+
+import * as React from 'react';
+import TestingScreen from '../screens/TestingScreen';
 const Drawer = createDrawerNavigator();
 
 export default () => {
@@ -33,6 +35,17 @@ export default () => {
           component={HomeScreen}
           options={{
             title: 'Home',
+            drawerIcon: ({focused, size}) => (
+              <Icon name="home" size={20} style={{}} color="black" />
+            ),
+          }}
+        />
+
+        <Drawer.Screen
+          name="Testing"
+          component={TestingScreen}
+          options={{
+            title: 'Testing',
             drawerIcon: ({focused, size}) => (
               <Icon name="home" size={20} style={{}} color="black" />
             ),

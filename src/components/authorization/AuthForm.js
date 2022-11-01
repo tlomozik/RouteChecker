@@ -6,8 +6,8 @@ import {
 } from '../../styles';
 import {useState, useCallback} from 'react';
 import {TouchableOpacity, Text} from 'react-native';
-import signup from '../../services/signup';
-import signin from '../../services/signin';
+import signup from '../../services/Authentication/signup';
+import signin from '../../services/Authentication/signin';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -96,9 +96,13 @@ const AuthForm = () => {
           </AuthorizationButton>
 
           <TouchableOpacity
-            style={{marginTop: 30}}
+            style={{
+              marginTop: 25,
+            }}
             onPress={() => setType(prevType => !prevType)}>
-            <Text>Posiadasz już konto? Zaloguj się</Text>
+            <Text style={{color: 'black'}}>
+              Posiadasz już konto? Zaloguj się
+            </Text>
           </TouchableOpacity>
         </>
       ) : (
@@ -124,7 +128,9 @@ const AuthForm = () => {
           <TouchableOpacity
             style={{marginTop: 30}}
             onPress={() => setType(prevType => !prevType)}>
-            <Text>Nie posiadasz konta? Zarejestruj się</Text>
+            <Text style={{color: 'black'}}>
+              Nie posiadasz konta? Zarejestruj się
+            </Text>
           </TouchableOpacity>
         </>
       )}

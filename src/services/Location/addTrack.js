@@ -1,5 +1,5 @@
 import {collection, addDoc} from 'firebase/firestore';
-import {db} from '../firebase/firebase';
+import {db} from '../../firebase/firebase';
 
 export default () => {
   const addTrack = async (array, trackName) => {

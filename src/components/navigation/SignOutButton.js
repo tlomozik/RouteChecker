@@ -1,6 +1,6 @@
 import {View, TouchableOpacity} from 'react-native';
 import React from 'react';
-import signout from '../../services/signout';
+import signout from '../../services/Authentication/signout';
 import {useDispatch} from 'react-redux';
 import {StyledButtonText} from '../../styles';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';

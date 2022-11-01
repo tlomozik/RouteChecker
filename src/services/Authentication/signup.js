@@ -1,4 +1,4 @@
-import {auth} from '../firebase/firebase';
+import {auth} from '../../firebase/firebase';
 import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
 
 export default (user, callback) => {
