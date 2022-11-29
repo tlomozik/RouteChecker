@@ -12,29 +12,33 @@ import {useDispatch} from 'react-redux';
 import {
   START_RECORDING,
   STOP_RECORDING,
-  SAVE_COORDS,
   WIPE_COORDS,
 } from '../../redux//slices/coordsSlice';
+import {WIPE_ACCEL_RECORDS} from '../../redux//slices/accelSlice';
 import CustomDialog from './CustomDialog';
 import addTrack from '../../services/Location/addTrack';
-const handleCoordsShowing = coordsArray => {
+import analyzeAccelerometer from '../../services/Accelerometer/analyzeAccelerometer';
+
+const handleCoordsShowing = (coordsArray, accelArray) => {
   coordsArray.map(item => console.log(item.latitude, ' ', item.longitude));
+  accelArray.map(item => console.log(item));
 };
 
 const BottomPanel = () => {
   const {coordsArray, recording} = useSelector(state => state.coords);
-
+  const {accelArray} = useSelector(state => state.accel);
   const dispatch = useDispatch();
-  //const [track, setTrack] = useState('');
+
   const [shouldShow, setShouldShow] = useState({signal: false, type: ''});
 
   const handleTrackDeleting = () => {
     dispatch(WIPE_COORDS());
+    dispatch(WIPE_ACCEL_RECORDS());
   };
 
   const handleTrackSaving = track => {
     const [saveTrack] = addTrack();
-    saveTrack(coordsArray, track);
+    saveTrack(coordsArray, accelArray, track);
     handleTrackDeleting();
   };
 
@@ -132,7 +136,7 @@ const BottomPanel = () => {
                   icon="map-check-outline"
                   mode="contained"
                   labelStyle={{color: 'black'}}
-                  onPress={() => handleCoordsShowing(coordsArray)}>
+                  onPress={() => handleCoordsShowing(coordsArray, accelArray)}>
                   <Text> Show</Text>
                 </RecordButton>
 
@@ -150,6 +154,14 @@ const BottomPanel = () => {
                   labelStyle={{color: 'black'}}
                   onPress={() => setShouldShow({signal: true, type: 'delete'})}>
                   <Text> Delete </Text>
+                </RecordButton>
+
+                <RecordButton
+                  icon="trash-can-outline"
+                  mode="contained"
+                  labelStyle={{color: 'black'}}
+                  onPress={() => analyzeAccelerometer(coordsArray)}>
+                  <Text> Ana </Text>
                 </RecordButton>
               </>
             ) : null}

@@ -58,6 +58,7 @@ export default (isFocused, shouldTrack, callback) => {
     }
 
     return () => {
+      console.log('unsubscribe watchLocation');
       stopWatching(subscriber);
     };
   }, [shouldTrack]);

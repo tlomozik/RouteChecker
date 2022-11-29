@@ -8,8 +8,6 @@ const TestingScreen = () => {
   const [shouldWatchAccel, setShouldWatchAccel] = useState(false);
   const {accelArray} = useSelector(state => state.accel);
 
-  watchAccelMeter(shouldWatchAccel);
-
   return (
     <GlobalContainer>
       <Text style={{fontWeight: '800', color: 'black'}}>Testing screen</Text>
@@ -27,14 +25,16 @@ const TestingScreen = () => {
         }}
       />
       <View style={{marginBottom: 100}}>
-        <FlatList
+        {/* <FlatList
           data={accelArray}
           renderItem={({item}) => (
             <Text style={{fontWeight: '800', color: 'black'}}>{item}</Text>
           )}
           keyExtractor={index => index}
-        />
+        /> */}
       </View>
+
+      {/* <Text style={{color:"black"}}>Test</Text> */}
     </GlobalContainer>
   );
 };

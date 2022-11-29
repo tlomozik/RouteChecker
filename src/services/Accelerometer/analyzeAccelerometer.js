@@ -1,21 +1,35 @@
-export default analyzeAccelerometer = accelArray => {
-  let counter = 0;
-  // const [arrayToSum, setArrayToSum] = useState([{id: 0}, {record: null}]);
+function handleColor() {
+  return (
+    'rgb(' +
+    Math.round(Math.random() * 255) +
+    ',' +
+    Math.round(Math.random() * 255) +
+    ',' +
+    Math.round(Math.random() * 255) +
+    ')'
+  );
+}
 
-  function calculateSum(arrayToSum) {
-    console.log(arrayToSum, 'z sumy');
+export default coordsArray => {
+  // const array = coordsArray.map((item, index) => {
+  //   return {latitude: item.latitude, longitude: item.longitude};
+  // });
+  let polylinesTab = [];
+
+  for (let index = 0; index <= coordsArray.length; index++) {
+    // if (index % 3 == 0) {
+    //   console.log(index);
+    polylinesTab.push({
+      id: index,
+      color: item => {
+        if (item % 3 == 0) return 'red';
+        else return 'yellow';
+      },
+      tab: coordsArray.splice(0, 3),
+    });
+
+    //}
   }
 
-  accelArray.map((record, index) => {
-    if (index % 10 == 0 && index != 0) {
-      console.log('Przekroczono 10 pomiarów');
-      counter = 0;
-      // accelArray = [];
-    }
-    counter++;
-    if (record > 10.0) {
-      console.log(counter, ' ', record, ' większa niż 10');
-    } else console.log(counter, record, ' nie jest wyższa od 10');
-  });
-  console.log('Wielkość tablicy', accelArray.length);
+  return [polylinesTab];
 };

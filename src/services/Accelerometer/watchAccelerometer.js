@@ -7,10 +7,9 @@ import {
 } from 'react-native-sensors';
 import {map, filter} from 'rxjs/operators';
 import {useDispatch} from 'react-redux';
-import {ADD_ACCEL_RECORDS} from '../../redux/slices/accelSlice';
+
 import {LogBox} from 'react-native';
-export default watchAccelMeter = shouldWatch => {
-  const dispatch = useDispatch();
+export default watchAccelMeter = (shouldWatch, callback) => {
   LogBox.ignoreLogs(['new NativeEventEmitter()']);
   // ignorowanie
   // WARN  `new NativeEventEmitter()` was called with a non-null argument without the required `addListener` method.
@@ -21,23 +20,34 @@ export default watchAccelMeter = shouldWatch => {
     function watcher() {
       setUpdateIntervalForType(SensorTypes.accelerometer, 400);
       subscriber = accelerometer
-        .pipe(
-          map(({x, y, z}) => x + y + z),
-          // filter(speed => speed > 9),
-        )
-        .subscribe(speed => {
-          console.log(speed);
-          dispatch(ADD_ACCEL_RECORDS(speed));
+        // .pipe(
+        //   map(({x, y, z}) => x + y + z),
+        //   // filter(speed => speed > 9),
+        // )
+        .subscribe(({z}) => {
+          speed = Math.abs(z);
+          //      console.log({x, y, z, speed});
+
+          callback(speed);
         });
     }
+
+    // function watcher() {
+    //   setUpdateIntervalForType(SensorTypes.accelerometer, 400);
+    //   subscriber = accelerometer.subscribe(({x, y, z}) => {
+    //     console.log(x, y, z);
+    //     //  dispatch(ADD_ACCEL_RECORDS(speed));
+    //   });
+    // }
+
     if (shouldWatch) {
       watcher();
     } else null;
     return () => {
-      console.log('Stop watching accel');
+      null;
 
       if (subscriber) {
-        console.log('unscribe');
+        console.log('unsubscribe accel');
         subscriber.unsubscribe();
       }
     };

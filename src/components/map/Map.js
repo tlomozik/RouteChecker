@@ -8,9 +8,24 @@ import {
 import MapView, {Circle, Polyline} from 'react-native-maps';
 import mapStyle from '../../styles/map/mapStyle';
 import {useSelector} from 'react-redux';
+import analyzeAccelerometer from '../../services/Accelerometer/analyzeAccelerometer';
 
 const Map = () => {
-  const {coords, coordsArray} = useSelector(state => state.coords);
+  const {coords, coordsArray: array} = useSelector(state => state.coords);
+
+  const coordsArray = array.map(item => {
+    return {latitude: item.latitude, longitude: item.longitude};
+  });
+
+  // console.log(coordsArray);
+
+  ///Getting polylinesTab
+  const [polylinesTab] = analyzeAccelerometer(coordsArray);
+
+  // if (polylinesTab) {
+  //   console.log(polylinesTab);
+  // }
+  ///
 
   coordsArray.map((element, index) =>
     console.log(
@@ -22,8 +37,12 @@ const Map = () => {
     ),
   );
   console.log('Z COORDS   ', coords.latitude, '   ', coords.longitude);
+
+  ////Map sizing
   const {height, width} = useWindowDimensions();
   const mapViewRef = useRef(null);
+
+  /////
 
   return (
     <>
@@ -54,36 +73,21 @@ const Map = () => {
             fillColor={'rgba(255, 0, 0, 0.3)'}
           />
         ) : null}
-        {coordsArray.length > 0 ? (
-          <Polyline
-            coordinates={[...coordsArray]}
-            strokeColor="rgba(255,255,0,0.5)" // fallback for when `strokeColors` is not supported by the map-provider
-            strokeWidth={6}
-          />
-        ) : null}
+
+        {polylinesTab.map((item, index) => {
+          console.log(item.tab);
+          return (
+            <Polyline
+              key={index}
+              coordinates={item.tab}
+              strokeColor={item.color(index)}
+              strokeWidth={6}
+            />
+          );
+        })}
       </MapView>
-      {/* <TouchableOpacity
-        onPress={() => {
-          setRefresh(prevRefresh => !prevRefresh);
-        }}
-        style={{position: 'absolute', alignSelf: 'flex-end', zIndex: 10}}>
-        <Image
-          source={{
-            uri: 'https://img.icons8.com/stickers/100/000000/location-update.png',
-          }}
-          style={styles.imgStyle}
-        />
-      </TouchableOpacity> */}
     </>
   );
 };
-const styles = StyleSheet.create({
-  imgStyle: {
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
-    top: 25,
-    right: 25,
-  },
-});
+
 export default Map;

@@ -19,8 +19,6 @@ export const coordsSlice = createSlice({
       return {...state, coordsArray: []};
     },
 
-    SAVE_COORDS: state => {},
-
     START_RECORDING: state => {
       return {...state, recording: true};
     },
@@ -51,7 +49,6 @@ export const {
   STOP_RECORDING,
   UPDATE_COORDS,
   WIPE_COORDS,
-  SAVE_COORDS,
 } = coordsSlice.actions;
 
 export default coordsSlice.reducer;
