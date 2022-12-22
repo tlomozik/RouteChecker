@@ -1,4 +1,3 @@
-import {StyleSheet, Text, ImageBackground} from 'react-native';
 import React from 'react';
 import {CentralizedContainer} from '../styles';
 import AuthForm from '../components/authorization/AuthForm';

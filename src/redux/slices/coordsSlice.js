@@ -4,6 +4,7 @@ const initialState = {
   coords: {},
   recording: false,
   coordsArray: [],
+  roadGaps: [],
 };
 
 export const coordsSlice = createSlice({
@@ -13,6 +14,14 @@ export const coordsSlice = createSlice({
     ADD_COORDS: (state, action) => {
       console.log('add_coords');
       return {...state, coords: {...action.payload}};
+    },
+
+    ADD_ROAD_GAP: (state, action) => {
+      return {...state, roadGaps: [...state.roadGaps, action.payload]};
+    },
+
+    WIPE_ROADGAPS: state => {
+      return {...state, roadGaps: []};
     },
 
     WIPE_COORDS: state => {
@@ -27,7 +36,6 @@ export const coordsSlice = createSlice({
     },
     UPDATE_COORDS: (state, action) => {
       if (state.recording == true) {
-        console.log('update_coords');
         return {
           ...state,
           coords: {...action.payload},
@@ -49,6 +57,8 @@ export const {
   STOP_RECORDING,
   UPDATE_COORDS,
   WIPE_COORDS,
+  ADD_ROAD_GAP,
+  WIPE_ROADGAPS,
 } = coordsSlice.actions;
 
 export default coordsSlice.reducer;

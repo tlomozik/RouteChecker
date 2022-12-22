@@ -7,9 +7,9 @@ import AuthorizationScreen from '../screens/AuthorizationScreen';
 import {isLoggedIn} from '../services/Authentication/isLoggedIn';
 import CustomDrawerContent from './CustomDrawerContent';
 import Icon from 'react-native-vector-icons/AntDesign';
-
+import {isAccellEmpty} from '../services/Accelerometer/isAccelEmpty';
 import * as React from 'react';
-import TestingScreen from '../screens/TestingScreen';
+import ChartScreen from '../screens/ChartScreen';
 const Drawer = createDrawerNavigator();
 
 export default () => {
@@ -40,17 +40,18 @@ export default () => {
             ),
           }}
         />
-
-        <Drawer.Screen
-          name="Testing"
-          component={TestingScreen}
-          options={{
-            title: 'Testing',
-            drawerIcon: ({focused, size}) => (
-              <Icon name="home" size={20} style={{}} color="black" />
-            ),
-          }}
-        />
+        {!isAccellEmpty() ? (
+          <Drawer.Screen
+            name="Charts"
+            component={ChartScreen}
+            options={{
+              title: 'Charts',
+              drawerIcon: ({focused, size}) => (
+                <Icon name="linechart" size={20} style={{}} color="black" />
+              ),
+            }}
+          />
+        ) : null}
 
         {!isLoggedIn() ? (
           <Drawer.Screen

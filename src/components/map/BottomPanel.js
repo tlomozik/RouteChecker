@@ -13,19 +13,25 @@ import {
   START_RECORDING,
   STOP_RECORDING,
   WIPE_COORDS,
+  WIPE_ROADGAPS,
 } from '../../redux//slices/coordsSlice';
 import {WIPE_ACCEL_RECORDS} from '../../redux//slices/accelSlice';
 import CustomDialog from './CustomDialog';
 import addTrack from '../../services/Location/addTrack';
-import analyzeAccelerometer from '../../services/Accelerometer/analyzeAccelerometer';
+import addRoadGaps from '../../services/RoadGap/addRoadGaps';
+const handleCoordsShowing = (coordsArray, accelArray, roadGaps) => {
+  coordsArray.map((item, index) =>
+    console.log(index, item.latitude, ' ', item.longitude),
+  );
+  accelArray.map((item, index) => console.log(item));
 
-const handleCoordsShowing = (coordsArray, accelArray) => {
-  coordsArray.map(item => console.log(item.latitude, ' ', item.longitude));
-  accelArray.map(item => console.log(item));
+  roadGaps.map((item, index) => {
+    console.log(index, item);
+  });
 };
 
 const BottomPanel = () => {
-  const {coordsArray, recording} = useSelector(state => state.coords);
+  const {coordsArray, recording, roadGaps} = useSelector(state => state.coords);
   const {accelArray} = useSelector(state => state.accel);
   const dispatch = useDispatch();
 
@@ -34,17 +40,21 @@ const BottomPanel = () => {
   const handleTrackDeleting = () => {
     dispatch(WIPE_COORDS());
     dispatch(WIPE_ACCEL_RECORDS());
+    dispatch(WIPE_ROADGAPS());
   };
 
   const handleTrackSaving = track => {
     const [saveTrack] = addTrack();
+    const [saveRoadGaps] = addRoadGaps();
     saveTrack(coordsArray, accelArray, track);
+
+    saveRoadGaps(roadGaps);
     handleTrackDeleting();
   };
 
   ////////////////////////////////////Animation
   const {height, width} = useWindowDimensions();
-  const MAX_TRANSLATE_Y = -height + height / 2.5;
+  const MAX_TRANSLATE_Y = -height + height / 1.5;
   const translateY = useSharedValue(0);
   const context = useSharedValue({y: 0});
 
@@ -136,7 +146,9 @@ const BottomPanel = () => {
                   icon="map-check-outline"
                   mode="contained"
                   labelStyle={{color: 'black'}}
-                  onPress={() => handleCoordsShowing(coordsArray, accelArray)}>
+                  onPress={() =>
+                    handleCoordsShowing(coordsArray, accelArray, roadGaps)
+                  }>
                   <Text> Show</Text>
                 </RecordButton>
 
@@ -154,14 +166,6 @@ const BottomPanel = () => {
                   labelStyle={{color: 'black'}}
                   onPress={() => setShouldShow({signal: true, type: 'delete'})}>
                   <Text> Delete </Text>
-                </RecordButton>
-
-                <RecordButton
-                  icon="trash-can-outline"
-                  mode="contained"
-                  labelStyle={{color: 'black'}}
-                  onPress={() => analyzeAccelerometer(coordsArray)}>
-                  <Text> Ana </Text>
                 </RecordButton>
               </>
             ) : null}

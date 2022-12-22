@@ -5,5 +5,5 @@ import {Button} from 'react-native-paper';
 export const RecordButton = styled(Button)`
   margin-top: 10px;
   width: 100px;
-  background-color: #D62828};
+  background-color: #f77f00;
 `;
