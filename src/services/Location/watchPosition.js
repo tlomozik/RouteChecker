@@ -15,14 +15,14 @@ export default (isFocused, shouldTrack, callback) => {
       try {
         subscriber = Geolocation.watchPosition(
           position => {
-            if (position.coords.latitude > 50.2616) {
-              callback({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              });
-            } else {
-              return null;
-            }
+            // if (position.coords.latitude > 50.2616) {
+            callback({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+            // } else {
+            //   return null;
+            // }
           },
           error => {
             console.log(error.code, error.message);
@@ -30,6 +30,7 @@ export default (isFocused, shouldTrack, callback) => {
           {
             enableHighAccuracy: true,
             interval: 1000,
+            fastestInterval: 1000,
             distanceFilter: 5,
           },
         );

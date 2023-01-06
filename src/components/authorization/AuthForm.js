@@ -87,13 +87,6 @@ const AuthForm = () => {
             }}>
             <StyledButtonText> Zarejestruj się</StyledButtonText>
           </AuthorizationButton>
-          <AuthorizationButton
-            icon="google"
-            mode="contained"
-            labelStyle={{color: 'black'}}
-            onPress={() => console.log('Google Pressed')}>
-            <StyledButtonText> Zarejestruj się z Google</StyledButtonText>
-          </AuthorizationButton>
 
           <TouchableOpacity
             style={{
@@ -116,13 +109,6 @@ const AuthForm = () => {
               signin(user, callback);
             }}>
             <StyledButtonText> Zaloguj się</StyledButtonText>
-          </AuthorizationButton>
-          <AuthorizationButton
-            icon="google"
-            mode="contained"
-            labelStyle={{color: 'black'}}
-            onPress={() => console.log('Google Pressed')}>
-            <StyledButtonText> Zaloguj się z Google</StyledButtonText>
           </AuthorizationButton>
 
           <TouchableOpacity

@@ -47,8 +47,8 @@ const BottomPanel = () => {
     const [saveTrack] = addTrack();
     const [saveRoadGaps] = addRoadGaps();
     saveTrack(coordsArray, accelArray, track);
-
     saveRoadGaps(roadGaps);
+
     handleTrackDeleting();
   };
 

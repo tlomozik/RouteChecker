@@ -1,25 +1,29 @@
-import {arrayUnion, doc, setDoc, updateDoc} from 'firebase/firestore';
+import {setDoc, doc, updateDoc, arrayUnion} from 'firebase/firestore';
 import {db} from '../../firebase/firebase';
 
 export default () => {
   const addRoadGaps = async roadGapsArray => {
-    try {
-      // subscriber = await setDoc(
-      //   doc(db, 'roadGaps', 'LktUXssoLA9QiKU9Uc2y'),
-      //   {
-      //     roadGapsArray,
-      //   },
-      //   {merge: false},
-      // );
-      // //    console.log('Document written with ID: ', subscriber.id);
+    const array = roadGapsArray.map((item, index) => {
+      return {
+        latitude: item.accelRecord.latitude,
+        longitude: item.accelRecord.longitude,
+        z: item.accelRecord.z,
+        timestamp: item.accelRecord.timestamp,
+      };
+    });
 
-      console.log(Object.assign({}, roadGapsArray));
+    console.log(array);
+    const documentRef = doc(db, 'roadGaps', 'gaps');
 
-      const roadGapRef = doc(db, 'roadGaps', 'array');
-      setDoc(roadGapRef, Object.assign({}, roadGapsArray), {merge: true});
-    } catch (e) {
-      console.error('Error adding document: ', e);
-    }
+    await updateDoc(documentRef, {
+      gaps: arrayUnion(...array),
+    })
+      .then(() => {
+        console.log('Updated/merged!');
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   return [addRoadGaps];

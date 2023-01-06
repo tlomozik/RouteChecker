@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {isAccellEmpty} from '../services/Accelerometer/isAccelEmpty';
 import * as React from 'react';
 import ChartScreen from '../screens/ChartScreen';
+import RoadGapsScreen from '../screens/RoadGapsScreen';
 const Drawer = createDrawerNavigator();
 
 export default () => {
@@ -37,6 +38,17 @@ export default () => {
             title: 'Home',
             drawerIcon: ({focused, size}) => (
               <Icon name="home" size={20} style={{}} color="black" />
+            ),
+          }}
+        />
+
+        <Drawer.Screen
+          name="Przeglądaj"
+          component={RoadGapsScreen}
+          options={{
+            title: 'Przeglądaj',
+            drawerIcon: ({focused, size}) => (
+              <Icon name="warning" size={20} style={{}} color="black" />
             ),
           }}
         />

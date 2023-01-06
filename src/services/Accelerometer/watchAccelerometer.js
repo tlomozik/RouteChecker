@@ -18,7 +18,7 @@ export default watchAccelMeter = (shouldWatch, watchCallback) => {
     let subscriber;
     let counter = 0;
     function watcher() {
-      setUpdateIntervalForType(SensorTypes.accelerometer, 1000);
+      setUpdateIntervalForType(SensorTypes.accelerometer, 300);
       subscriber = accelerometer
         // .pipe(
         //   map(({x, y, z}) => x + y + z),

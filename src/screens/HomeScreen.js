@@ -24,7 +24,7 @@ const HomeScreen = () => {
   //////callbacks initizalization
   const watchLocationCallback = useCallback(
     location => dispatch(UPDATE_COORDS(location)),
-    [recording],
+    // [recording],
   );
   const currentLocationCallback = useCallback(location =>
     dispatch(ADD_COORDS(location)),
@@ -43,7 +43,9 @@ const HomeScreen = () => {
 
   /////invoking hooks
   const [loading] = getCurrentLocation(currentLocationCallback);
-  watchPosition(isFocused, recording, watchLocationCallback);
+  watchPosition(isFocused, recording, location =>
+    dispatch(UPDATE_COORDS(location)),
+  );
   watchAccelMeter(recording, watchAccelCallback);
 
   createRoadGap(addRoadGap);
