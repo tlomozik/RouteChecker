@@ -1,5 +1,5 @@
 import {useWindowDimensions, ActivityIndicator, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import MapView, {Marker} from 'react-native-maps';
 import getCurrentLocation from '../services/Location/getCurrentLocation';
@@ -19,21 +19,17 @@ const RoadGapsScreen = () => {
   const [loading] = getCurrentLocation(currentLocationCallback);
   const [gaps, setGaps] = useState();
   const [switcher, setSwitcher] = useState(false);
-
+  const potholes = useRef(null);
   const handleGettingGaps = async () => {
     const [roadGaps] = await getRoadGaps();
-    setGaps(roadGaps);
+    potholes.current = roadGaps;
     setSwitcher(true);
   };
 
   const handleDeletingGaps = () => {
-    setGaps(null);
+    potholes.current = null;
     setSwitcher(false);
   };
-
-  gaps?.gaps.map((item, index) => {
-    console.log(index, item.latitude, item.longitude);
-  });
 
   return (
     <>
@@ -59,7 +55,7 @@ const RoadGapsScreen = () => {
                 latitudeDelta: 0.1,
                 longitudeDelta: 0.1,
               }}>
-              {gaps?.gaps.map((item, index) => {
+              {potholes.current?.gaps?.map((item, index) => {
                 return (
                   <Marker
                     key={index}
@@ -68,7 +64,7 @@ const RoadGapsScreen = () => {
                       longitude: item.longitude,
                     }}
                     // key={index}
-                    title={`Uchwycone: ${item?.timestamp}`}
+                    title={`Uchwycone: ${item.timestamp}`}
                   />
                 );
               })}

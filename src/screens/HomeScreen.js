@@ -18,6 +18,7 @@ import PermissionAlert from '../components/alerts/PermissionAlert';
 import createRoadGap from '../services/RoadGap/createRoadGap';
 const HomeScreen = () => {
   const {recording} = useSelector(state => state.coords);
+  const {coords} = useSelector(state => state.coords);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
@@ -46,9 +47,9 @@ const HomeScreen = () => {
   watchPosition(isFocused, recording, location =>
     dispatch(UPDATE_COORDS(location)),
   );
-  watchAccelMeter(recording, watchAccelCallback);
+  watchAccelMeter(recording, watchAccelCallback, addRoadGap);
 
-  createRoadGap(addRoadGap);
+  // createRoadGap(addRoadGap);
 
   return (
     <View style={{flex: 1, alignItems: 'center'}}>

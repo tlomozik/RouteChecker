@@ -32,26 +32,16 @@ export default () => {
           },
         }}>
         <Drawer.Screen
-          name="Home"
+          name="AnalizaTrasy"
           component={HomeScreen}
           options={{
-            title: 'Home',
+            title: 'Analiza Trasy',
             drawerIcon: ({focused, size}) => (
               <Icon name="home" size={20} style={{}} color="black" />
             ),
           }}
         />
 
-        <Drawer.Screen
-          name="Przeglądaj"
-          component={RoadGapsScreen}
-          options={{
-            title: 'Przeglądaj',
-            drawerIcon: ({focused, size}) => (
-              <Icon name="warning" size={20} style={{}} color="black" />
-            ),
-          }}
-        />
         {!isAccellEmpty() ? (
           <Drawer.Screen
             name="Charts"
@@ -64,7 +54,16 @@ export default () => {
             }}
           />
         ) : null}
-
+        <Drawer.Screen
+          name="Przeglądaj"
+          component={RoadGapsScreen}
+          options={{
+            title: 'Przeglądaj',
+            drawerIcon: ({focused, size}) => (
+              <Icon name="warning" size={20} style={{}} color="black" />
+            ),
+          }}
+        />
         {!isLoggedIn() ? (
           <Drawer.Screen
             name="Login"
@@ -77,16 +76,18 @@ export default () => {
             }}
           />
         ) : (
-          <Drawer.Screen
-            name="Profile"
-            component={ProfileScreen}
-            options={{
-              title: 'Profile',
-              drawerIcon: ({focused, size}) => (
-                <Icon name="profile" size={20} style={{}} color="black" />
-              ),
-            }}
-          />
+          <>
+            <Drawer.Screen
+              name="Profile"
+              component={ProfileScreen}
+              options={{
+                title: 'Profil',
+                drawerIcon: ({focused, size}) => (
+                  <Icon name="profile" size={20} style={{}} color="black" />
+                ),
+              }}
+            />
+          </>
         )}
       </Drawer.Navigator>
     </NavigationContainer>

@@ -5,10 +5,11 @@ export default () => {
   const addRoadGaps = async roadGapsArray => {
     const array = roadGapsArray.map((item, index) => {
       return {
-        latitude: item.accelRecord.latitude,
-        longitude: item.accelRecord.longitude,
+        latitude: item.coords.latitude,
+        longitude: item.coords.longitude,
         z: item.accelRecord.z,
         timestamp: item.accelRecord.timestamp,
+        id: item.accelRecord.id,
       };
     });
 

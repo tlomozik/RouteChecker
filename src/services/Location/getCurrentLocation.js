@@ -25,9 +25,6 @@ export default callback => {
             },
             {
               enableHighAccuracy: true,
-              interval: 1000,
-              distanceFilter: 100,
-              maximumAge: 0,
             },
           );
         }

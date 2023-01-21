@@ -18,7 +18,7 @@ const AuthForm = () => {
   const navigation = useNavigation();
 
   const callback = useCallback(user => {
-    dispatch(ADD_USER(user)), navigation.navigate('Home');
+    dispatch(ADD_USER(user)), navigation.navigate('AnalizaTrasy');
   });
 
   const [checkPass, setCheckPass] = useState('');

@@ -11,12 +11,6 @@ const Map = () => {
   const prevPolylinesTab = useRef([]);
   const counter = useRef(0);
 
-  const holes = [
-    {latitude: 50.29884, longitude: 19.12162, title: 'Pierwszy'},
-    {latitude: 50.29793, longitude: 19.1203, title: 'Drugi'},
-    {latitude: 50.29262, longitude: 19.11417, title: 'Trzeci'},
-  ];
-
   // const coordsArray = array.map(item => {
   //   return {latitude: item.latitude, longitude: item.longitude};
   // });
@@ -87,15 +81,15 @@ const Map = () => {
         })}
 
         {roadGaps.map((item, index) => {
-          if (roadGaps.length > 0) {
-            return (
-              <Marker
-                coordinate={item?.accelRecord}
-                key={index}
-                title={`Uchwycone: ${item?.timestamp}`}
-              />
-            );
-          }
+          // if (roadGaps.length > 0) {
+          return (
+            <Marker
+              coordinate={item.coords}
+              key={index}
+              title={`Uchwycone: ${item?.accelRecord.timestamp}`}
+            />
+          );
+          // }
         })}
 
         {coords ? (

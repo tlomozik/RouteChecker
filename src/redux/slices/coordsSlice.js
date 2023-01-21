@@ -17,7 +17,13 @@ export const coordsSlice = createSlice({
     },
 
     ADD_ROAD_GAP: (state, action) => {
-      return {...state, roadGaps: [...state.roadGaps, action.payload]};
+      return {
+        ...state,
+        roadGaps: [
+          {coords: state.coords, accelRecord: action.payload},
+          ...state.roadGaps,
+        ],
+      };
     },
 
     WIPE_ROADGAPS: state => {
