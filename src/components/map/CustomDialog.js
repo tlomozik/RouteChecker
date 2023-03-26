@@ -7,7 +7,7 @@ import {
   Provider,
   TextInput,
 } from 'react-native-paper';
-
+import {Alert} from 'react-native';
 const CustomDialog = ({show, setShow, callback}) => {
   const [trackName, setTrackName] = useState('');
 
@@ -16,6 +16,11 @@ const CustomDialog = ({show, setShow, callback}) => {
   const handleAction = () => {
     hideDialog();
     callback(trackName);
+    Alert.alert(
+      'Informacja',
+      'Pomyślnie wykonano operację',
+      // [{text: 'OK', onPress: () => BackHandler.exitApp()}],
+    );
   };
 
   return (
@@ -30,31 +35,29 @@ const CustomDialog = ({show, setShow, callback}) => {
           }}>
           {show.type == 'save' ? (
             <>
-              <RNPDialog.Title>Saving</RNPDialog.Title>
+              <RNPDialog.Title>Zapisywanie</RNPDialog.Title>
               <RNPDialog.Content>
-                <Paragraph>Please enter track's name</Paragraph>
+                <Paragraph>Proszę wpisać nazwę trasy</Paragraph>
                 <TextInput
-                  placeholder="Track's name"
+                  placeholder="Nazwa"
                   value={trackName}
                   onChangeText={setTrackName}
                 />
               </RNPDialog.Content>
               <RNPDialog.Actions>
-                <Button onPress={handleAction}>Submit</Button>
-                <Button onPress={hideDialog}>Dismiss</Button>
+                <Button onPress={handleAction}>Zapisz</Button>
+                <Button onPress={hideDialog}>Odrzuć</Button>
               </RNPDialog.Actions>
             </>
           ) : (
             <>
-              <RNPDialog.Title>Warning</RNPDialog.Title>
+              <RNPDialog.Title>Ostrzeżenie</RNPDialog.Title>
               <RNPDialog.Content>
-                <Paragraph>
-                  Are you sure you want to delete current track?
-                </Paragraph>
+                <Paragraph>Czy na pewno chcesz usunąć trasę?</Paragraph>
               </RNPDialog.Content>
               <RNPDialog.Actions>
-                <Button onPress={handleAction}>Yes</Button>
-                <Button onPress={hideDialog}>No</Button>
+                <Button onPress={handleAction}>Tak</Button>
+                <Button onPress={hideDialog}>Nie</Button>
               </RNPDialog.Actions>
             </>
           )}

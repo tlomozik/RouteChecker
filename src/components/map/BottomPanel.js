@@ -19,6 +19,7 @@ import {WIPE_ACCEL_RECORDS} from '../../redux//slices/accelSlice';
 import CustomDialog from './CustomDialog';
 import addTrack from '../../services/Location/addTrack';
 import addRoadGaps from '../../services/RoadGap/addRoadGaps';
+
 const handleCoordsShowing = (coordsArray, accelArray, roadGaps) => {
   coordsArray.map((item, index) =>
     console.log(index, item.latitude, ' ', item.longitude),
@@ -142,7 +143,7 @@ const BottomPanel = () => {
 
             {coordsArray.length > 0 && !recording ? (
               <>
-                <RecordButton
+                {/* <RecordButton
                   icon="map-check-outline"
                   mode="contained"
                   labelStyle={{color: 'black'}}
@@ -150,14 +151,14 @@ const BottomPanel = () => {
                     handleCoordsShowing(coordsArray, accelArray, roadGaps)
                   }>
                   <Text> Show</Text>
-                </RecordButton>
+                </RecordButton> */}
 
                 <RecordButton
                   icon="content-save-all"
                   mode="contained"
                   labelStyle={{color: 'black'}}
                   onPress={() => setShouldShow({signal: true, type: 'save'})}>
-                  <Text> Save</Text>
+                  <Text> Zapisz</Text>
                 </RecordButton>
 
                 <RecordButton
@@ -165,7 +166,7 @@ const BottomPanel = () => {
                   mode="contained"
                   labelStyle={{color: 'black'}}
                   onPress={() => setShouldShow({signal: true, type: 'delete'})}>
-                  <Text> Delete </Text>
+                  <Text> Usuń </Text>
                 </RecordButton>
               </>
             ) : null}

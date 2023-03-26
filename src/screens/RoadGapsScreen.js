@@ -1,4 +1,9 @@
-import {useWindowDimensions, ActivityIndicator, View} from 'react-native';
+import {
+  useWindowDimensions,
+  ActivityIndicator,
+  View,
+  Alert,
+} from 'react-native';
 import React, {useCallback, useState, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import MapView, {Marker} from 'react-native-maps';
@@ -12,13 +17,14 @@ import {Text} from 'react-native-paper';
 const RoadGapsScreen = () => {
   const {coords} = useSelector(state => state.coords);
   const {height, width} = useWindowDimensions();
+  const [forceRefresh, setForceRefresh] = useState(0);
   const dispatch = useDispatch();
   const currentLocationCallback = useCallback(location => {
     dispatch(ADD_COORDS(location));
   }, []);
   const [loading] = getCurrentLocation(currentLocationCallback);
-  const [gaps, setGaps] = useState();
-  const [switcher, setSwitcher] = useState(false);
+
+  const [switcher, setSwitcher] = useState();
   const potholes = useRef(null);
   const handleGettingGaps = async () => {
     const [roadGaps] = await getRoadGaps();
@@ -28,6 +34,7 @@ const RoadGapsScreen = () => {
 
   const handleDeletingGaps = () => {
     potholes.current = null;
+    setForceRefresh(Math.floor(Math.random() * 10000)); ////// refresh mapy
     setSwitcher(false);
   };
 
@@ -45,6 +52,7 @@ const RoadGapsScreen = () => {
         <>
           <CentralizedContainer>
             <MapView
+              key={forceRefresh} ////refresh mapy
               provider="google"
               style={{
                 width,
@@ -82,6 +90,13 @@ const RoadGapsScreen = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
+            {potholes.current ? (
+              <Text>
+                Aktualna liczba zarejestrowanych nierówności:
+                {potholes.current.gaps.length}
+              </Text>
+            ) : null}
+
             <ShowGapsButton onPress={() => handleGettingGaps()}>
               {switcher ? <Text>Odśwież</Text> : <Text>Pokaż</Text>}
             </ShowGapsButton>

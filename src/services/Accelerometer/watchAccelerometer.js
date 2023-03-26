@@ -57,6 +57,30 @@ const identifyGapByMaxMin = testedArray => {
     console.log('Duża nierówność o różnicy: ', diff, 'Wartości: ', a, b);
 };
 
+const throttleInterval = testedArray => {
+  console.log('throttling check');
+  let throttleSpeedUp = false;
+  let average = testedArray.reduce((a, b) => a + b, 0) / 5;
+  console.log(testedArray);
+  console.log('Średnia: ', average);
+  for (let a = 0; a < 5; a++) {
+    if (
+      (testedArray[a] > average && testedArray[a] - average > 2) || //jeśli nierówność większa od średniej
+      (testedArray[a] < average && average - testedArray[a] > 2) //jeśli nierówność mniejsza
+    ) {
+      console.log('Large pothole at index', a);
+      throttleSpeedUp = true;
+      break;
+    } else {
+      console.log('Index: ', a, ' is not a  pothole');
+    }
+  }
+
+  if (throttleSpeedUp) {
+    setUpdateIntervalForType(SensorTypes.accelerometer, 200);
+  } else setUpdateIntervalForType(SensorTypes.accelerometer, 1000);
+};
+
 export default watchAccelMeter = (
   shouldWatch,
   watchCallback,
@@ -72,9 +96,9 @@ export default watchAccelMeter = (
   useEffect(() => {
     let subscriber;
     let counter = 0;
-
+    let threshold = 200;
     function watcher() {
-      setUpdateIntervalForType(SensorTypes.accelerometer, 200);
+      setUpdateIntervalForType(SensorTypes.accelerometer, threshold);
       subscriber = accelerometer.subscribe(({x, y, z, timestamp}) => {
         counter++;
         moment.locale('pl');
@@ -91,20 +115,26 @@ export default watchAccelMeter = (
           roadGapCallback(speed);
         }
 
-        ////////Algorytm ze średnią
-        if (
-          prevArray.current.length % 5 == 0 &&
-          prevArray.current.length != 0
-        ) {
-          identifyGapByAvg(
-            prevArray.current.slice(-5),
-            prevArray.current.length,
-          );
-        }
+        // *Throttling akcelerometru
+        // if (counter % 5 == 0 && counter != 0) {
+        //   throttleInterval(prevArray.current.slice(-5));
+        // }
+        ////////
+
+        // *Algorytm ze średnią
+        // if (
+        //   prevArray.current.length % 5 == 0 &&
+        //   prevArray.current.length != 0
+        // ) {
+        //   identifyGapByAvg(
+        //     prevArray.current.slice(-5),
+        //     prevArray.current.length,
+        //   );
+        // }
 
         ////////
 
-        ////////Algorytm porównujący dwa odczyty
+        // * Algorytm porównujący dwa odczyty
         // if (
         //   prevArray.current.length % 2 == 0 &&
         //   prevArray.current.length != 0

@@ -24,27 +24,27 @@ const Map = () => {
 
   // console.log(prevPolylinesTab.current);
 
-  useEffect(() => {
-    if (coordsArray.length % 3 == 0 && coordsArray.length != 0) {
-      counter.current++;
-      const polyline = combineAccelWithCoords(
-        counter.current,
-        coordsArray,
-        accelArray,
-      );
+  // useEffect(() => {
+  //   if (coordsArray.length % 3 == 0 && coordsArray.length != 0) {
+  //     counter.current++;
+  //     const polyline = combineAccelWithCoords(
+  //       counter.current,
+  //       coordsArray,
+  //       accelArray,
+  //     );
 
-      prevPolylinesTab.current.push(...polyline);
-    }
+  //     prevPolylinesTab.current.push(...polyline);
+  //   }
 
-    return () => {
-      if (coordsArray.length == 0) {
-        console.log('Polylines cleanup');
-        counter.current = 0;
-        prevPolylinesTab.current = [];
-      }
-      //    prevPolylinesTab.current = null;
-    };
-  }, [coordsArray.length]);
+  //   return () => {
+  //     if (coordsArray.length == 0) {
+  //       console.log('Polylines cleanup');
+  //       counter.current = 0;
+  //       prevPolylinesTab.current = [];
+  //     }
+  //     //    prevPolylinesTab.current = null;
+  //   };
+  // }, [coordsArray.length]);
 
   return (
     <>
@@ -67,7 +67,7 @@ const Map = () => {
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}>
-        {prevPolylinesTab.current.map((item, index) => {
+        {/* {prevPolylinesTab.current.map((item, index) => {
           if (coordsArray.length > 0) {
             return (
               <Polyline
@@ -78,10 +78,14 @@ const Map = () => {
               />
             );
           } else null;
-        })}
-
+        })} */}
+        <Polyline
+          coordinates={coordsArray}
+          strokeColor={'red'}
+          strokeWidth={6}
+        />
         {roadGaps.map((item, index) => {
-          // if (roadGaps.length > 0) {
+          // if(item.coords.latitude && item.coords.latitude)
           return (
             <Marker
               coordinate={item.coords}

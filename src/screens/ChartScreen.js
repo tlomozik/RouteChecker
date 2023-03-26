@@ -20,49 +20,56 @@ const ChartScreen = () => {
 
   return (
     <GlobalContainer>
-      {/* <View style={{marginBottom: 100}}>
-        <FlatList
-          data={accelArray}
-          renderItem={({item}) => (
-            <Text style={{fontWeight: '800', color: 'black'}}>
-              {item.id} ---- {item.value}
-            </Text>
-          )}
-          keyExtractor={item => item.id}
-        />
-      </View> */}
-
       {accelArray.length > 0 ? (
-        <Chart
-          style={{height: 400, width: 400}}
-          data={data}
-          padding={{left: 40, bottom: 20, right: 20, top: 20}}
-          yDomain={{min: 0, max: 20}}
-          viewport={{size: {width: 10}}}>
-          <VerticalAxis
-            tickCount={13}
-            theme={{labels: {formatter: v => v.toFixed(1)}}}
-          />
-          <HorizontalAxis
-            tickCount={data.length}
-            theme={{labels: {formatter: v => v.toFixed(0)}}}
-          />
-          <Area
-            theme={{
-              gradient: {
-                from: {color: '#f39c12', opacity: 0.4},
-                to: {color: '#f39c12', opacity: 0.4},
-              },
-            }}
-            smoothing="cubic-spline"
-          />
-          <Line
-            smoothing="cubic-spline"
-            theme={{
-              stroke: {color: '#ffa502', width: 5},
-            }}
-          />
-        </Chart>
+        <>
+          <View
+            style={{
+              alignSelf: 'flex-start',
+              marginTop: 3,
+            }}>
+            <Text style={{color: 'black'}}>[m/s^2]</Text>
+          </View>
+          <Chart
+            style={{height: 400, width: 400}}
+            data={data}
+            padding={{left: 60, bottom: 20, right: 20, top: 20}}
+            yDomain={{min: 0, max: 15}}
+            viewport={{
+              size: {width: 15},
+            }}>
+            <VerticalAxis
+              tickCount={13}
+              theme={{labels: {formatter: v => v.toFixed(1)}}}
+            />
+            <HorizontalAxis
+              tickCount={data.length}
+              theme={{labels: {formatter: v => v.toFixed(0)}}}
+            />
+            <Area
+              theme={{
+                gradient: {
+                  from: {color: '#f39c12', opacity: 0.4},
+                  to: {color: '#f39c12', opacity: 0.4},
+                },
+              }}
+              smoothing="cubic-spline"
+            />
+            <Line
+              smoothing="cubic-spline"
+              theme={{
+                stroke: {color: '#ffa502', width: 5},
+              }}
+            />
+          </Chart>
+          <View
+            style={{
+              alignSelf: 'flex-end',
+              marginTop: 3,
+              marginRight: 5,
+            }}>
+            <Text style={{color: 'black'}}>L.p</Text>
+          </View>
+        </>
       ) : null}
     </GlobalContainer>
   );

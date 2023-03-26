@@ -47,7 +47,7 @@ export default () => {
             name="Charts"
             component={ChartScreen}
             options={{
-              title: 'Charts',
+              title: 'Wykres',
               drawerIcon: ({focused, size}) => (
                 <Icon name="linechart" size={20} style={{}} color="black" />
               ),

@@ -16,6 +16,7 @@ export default callback => {
         if (permission === PermissionsAndroid.RESULTS.GRANTED) {
           subscriber = Geolocation.getCurrentPosition(
             position => {
+              console.log(position);
               callback(position.coords);
               setLoading(1);
             },
